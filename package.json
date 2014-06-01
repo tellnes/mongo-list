@@ -1,0 +1,31 @@
+{
+  "name": "mongo-list",
+  "version": "0.0.1",
+  "description": "json-list-response",
+  "main": "index.js",
+  "dependencies": {
+    "json-list-response": "~0.0.2",
+    "urlsafe-base64": "~0.0.2",
+    "xtend": "~3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tellnes/json-list-response.git"
+  },
+  "keywords": [
+    "json",
+    "list",
+    "stream",
+    "response",
+    "rows",
+    "transform"
+  ],
+  "author": {
+    "name": "Christian Tellnes",
+    "email": "christian@tellnes.no",
+    "url": "http://christian.tellnes.com"
+  },
+  "license": "MIT"
+}
