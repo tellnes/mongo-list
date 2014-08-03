@@ -4,9 +4,8 @@
   "description": "json-list-response",
   "main": "index.js",
   "dependencies": {
-    "json-list-response": "~0.0.2",
-    "urlsafe-base64": "~0.0.2",
-    "xtend": "~3.0.0"
+    "json-list-response": "~0.1.0",
+    "urlsafe-base64": "~0.0.2"
   },
   "devDependencies": {},
   "scripts": {},

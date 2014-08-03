@@ -3,14 +3,25 @@ var JSONListResponse = require('json-list-response')
   , Transform = require('stream').Transform
   , inherits = require('util').inherits
 
+var after =
+  { 'objectid': require('./lib/after/object-id')
+  , 'date': require('./lib/after/date')
+  }
+
 module.exports = MongoList
 
 function MongoList(options) {
-  var sortKey = options.sortKey || '_id'
-    , sortDir = options.descending ? -1 : 1
-    , obj
 
-  options.sortKey = options.transformedSortKey || sortKey
+  var sorting = options.sorting || { key: '_id', type: 'objectid' }
+
+  options.sortKey = sorting.transformed || sorting.key
+
+  sorting.type = sorting.type && sorting.type.toLowerCase() || null
+
+  if (sorting.type && after[sorting.type]) {
+    options.ObjectID = options.ObjectID || MongoList.ObjectID
+    options.After = after[sorting.type]
+  }
 
   JSONListResponse.call(this, options)
 
@@ -25,16 +36,19 @@ function MongoList(options) {
   this.cursor.limit(this.query.limit + 1)
 
 
-  obj = {}
-  obj[sortKey] = sortDir
+  var obj = {}
+  obj[sorting.key] = sorting.descending ? -1 : 1
   this.cursor.sort(obj)
 
   if (this.query.after) {
-    obj = {}
-    obj[sortKey] = {}
-    obj[sortKey][sortDir < 0 ? '$lte' : '$gte'] = this.after.value
-    this.selector.$and.push(obj)
-    this.cursor.skip(this.after.skip + 1)
+    if (this.after.mongoSorting) {
+      this.after.mongoSorting(this, sorting)
+    } else {
+      obj = {}
+      obj[sorting.key] = {}
+      obj[sorting.key][sorting.descending ? '$lt' : '$gt'] = this.after.value
+      this.selector.$and.push(obj)
+    }
   }
 
   var cursorStream = (new Readable({ objectMode: true })).wrap(this.cursor.stream())
