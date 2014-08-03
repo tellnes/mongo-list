@@ -58,10 +58,10 @@ function MongoList(options) {
     if (typeof trans === 'function') {
       trans = new AsyncTransform(trans)
     }
-    cursorStream.pipe(trans).pipe(this)
+    cursorStream.pipe(trans).pipe(this, { end: options.end })
 
   } else {
-    cursorStream.pipe(this)
+    cursorStream.pipe(this, { end: options.end })
   }
 }
 inherits(MongoList, JSONListResponse)
