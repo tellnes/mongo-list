@@ -8,7 +8,10 @@ var after =
   , 'date': require('./lib/after/date')
   }
 
-module.exports = MongoList
+exports = module.exports = MongoList
+exports.Query = JSONListResponse.Query
+exports.AsyncTransform = AsyncTransform
+
 
 function MongoList(options) {
 
@@ -66,8 +69,6 @@ function MongoList(options) {
 }
 inherits(MongoList, JSONListResponse)
 
-
-module.exports.AsyncTransform = AsyncTransform
 
 function AsyncTransform(fn) {
   if (!(this instanceof AsyncTransform)) return new AsyncTransform(fn)
