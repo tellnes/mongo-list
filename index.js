@@ -6,6 +6,7 @@ var JSONListResponse = require('json-list-response')
 var after =
   { 'objectid': require('./lib/after/object-id')
   , 'date': require('./lib/after/date')
+  , 'string': require('./lib/after/string')
   }
 
 exports = module.exports = MongoList
