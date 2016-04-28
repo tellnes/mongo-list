@@ -4,7 +4,7 @@
   "description": "Mongo List",
   "main": "index.js",
   "dependencies": {
-    "json-list-response": "~0.1.0",
+    "json-list-response": "^1.0.0",
     "urlsafe-base64": "~1.0.0"
   },
   "devDependencies": {},
