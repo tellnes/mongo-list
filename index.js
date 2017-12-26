@@ -35,7 +35,12 @@ function MongoList(options) {
     this.selector.$and.push(options.selector)
   }
 
-  this.cursor = options.collection.find(this.selector, options.fields || {})
+  this.cursor = options.collection.find(this.selector)
+  this.cursor.on('error', (err) => this.emit('error', err))
+
+  if (options.fields) {
+    this.cursor.project(options.fields)
+  }
 
   this.cursor.limit(this.query.limit + 1)
 
@@ -55,17 +60,16 @@ function MongoList(options) {
     }
   }
 
-  var cursorStream = (new Readable({ objectMode: true })).wrap(this.cursor.stream())
-
   if (options.transform) {
     var trans = options.transform
     if (typeof trans === 'function') {
       trans = new AsyncTransform(trans)
     }
-    cursorStream.pipe(trans).pipe(this, { end: options.end })
+    trans.on('error', (err => this.emit('error', err)))
+    this.cursor.pipe(trans).pipe(this, { end: options.end })
 
   } else {
-    cursorStream.pipe(this, { end: options.end })
+    this.cursor.pipe(this, { end: options.end })
   }
 }
 inherits(MongoList, JSONListResponse)
